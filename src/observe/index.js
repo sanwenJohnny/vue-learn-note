@@ -1,12 +1,15 @@
 import {arrayMethods} from './array.js'
 
 // 把data中数据用object.defineProperty重新定义 不兼容IE8
-import {isObject} from '../util/index'
+import {isObject,def} from '../util/index'
 
 class Observer{
     constructor(value) {
         // vue2 如果数据的层次过多，需要递归去解析对象中的属性，依次增加get和set方法
         // vue3 用proxy解决了这个问题
+        // value.__ob__ = this //给每一个监控过的对象增加一个__ob__属性
+        def(value, '__ob__', this)
+
         // 对数组监控
         if(Array.isArray(value)) {
             // 如果是数组的话不对索引进行观测，会导致性能问题

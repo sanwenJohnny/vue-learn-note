@@ -6,15 +6,14 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="app" style="color: red;"><p>hello {{name}}</p></div>
     <script src="/dist/umd/vue.js"></script>
     <script>
         let vm = new Vue({
             el: '#app',
             data(){
-                return {name: [{a:1}, {b:2}]}
-            },
-            computed(){},
-            watch(){}
+                return {name:'alxe', age: '22'}
+            }
         })
     </script>
 </body>

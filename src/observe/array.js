@@ -17,8 +17,21 @@ const methods = [
 ]
 methods.forEach(method=>{
     arrayMethods[method] = function(...args) {
-        const result = oldArrayMethods[method].apply(this,args) // 调用原生的数组方法
-        // push unshift 添加的元素可能还是一个对象
+        const result = oldArrayMethods[method].apply(this,args) // AOP切片编程 调用原生的数组方法，this谁调用的就是谁，此处是我们的方法
+        // push unshift 添加的元素可能还是一个对象 需要继续监听
+        let inserted;
+        let ob = this.__ob__;
+        switch (method) {
+            case 'push':
+            case 'unshift':
+                inserted = args;
+                break;
+            case 'splice': // 3个 新增的属性，splice 有删除，新增的功能，arr.splice(0,1,{name:1})
+                inserted = args.slice(2)  // 取增删的数据最后一个
+            default:
+                break;
+        }
+        if(inserted) ob.observerArray(inserted); // 将新增属性继续观测
         
         return result
     }
